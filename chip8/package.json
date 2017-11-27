@@ -1,7 +1,7 @@
 {
     "name": "chip8-emulator",
     "version": "0.1.0",
-    "description": "A basic Chip8 emulator written in TypeScript (babel + webpack dev server)",
+    "description": "A basic Chip8 emulator written in TypeScript (webpack + ts-loader)",
     "scripts": {
         "start": "npm run dev",
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
