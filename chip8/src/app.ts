@@ -74,15 +74,3 @@ createCanevas();
 import CPU from './cpu';
 
 const chip8:CPU = new CPU();
-
-console.log(chip8);
-console.log(chip8.getRegister('V3'));
-console.log(chip8.getRegister('VE'));
-console.log(chip8.getRegister('VF'));
-
-chip8.setRegister('V3', 0x3);
-chip8.setRegister('VE', 0xF00E);
-
-console.log(chip8.getRegister('V3').toString(16));
-console.log(chip8.getRegister('VE').toString(16));
-console.log(chip8.getRegister('VF').toString(16));
