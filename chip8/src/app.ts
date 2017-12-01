@@ -1,17 +1,23 @@
 const app:HTMLElement = document.getElementById('app');
 
-function createCanevas(): HTMLElement
+function createCanvas(): HTMLCanvasElement
 {
-    const canevas:HTMLElement = document.createElement('canevas');
+    const canvas:HTMLCanvasElement = document.createElement('canvas');
 
     /* Chip 8 resolution: 64×32 */
-    canevas.style.width = '640px';
-    canevas.style.height = '320px';
-    app.appendChild(canevas);
-    return canevas;
+    canvas.width = 64;
+    canvas.height = 32;
+    canvas.style.width = '640px';
+    canvas.style.height = '320px';
+    app.appendChild(canvas);
+    return canvas;
 }
 
-createCanevas();
+const canvas:HTMLCanvasElement = createCanvas();
+const ctx = canvas.getContext('2d');
+
+console.log(ctx);
+
 
 /*
 ** Specs : http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
