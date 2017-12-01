@@ -8,28 +8,45 @@ interface ICanvasManagerOptions
     canvasWidth?: number;
     canvasHeight?: number;
     backgroundColor?: string;
+    color?: string
+}
+
+interface ICanvasDrawOptions
+{
+    x: number;
+    y: number;
 }
 
 class CanvasManager
 {
     /* Properties */
-    private readonly ctx:CanvasRenderingContext2D;
-    private readonly canvas:HTMLCanvasElement;
-    private readonly canvasWidth:number;
-    private readonly canvasHeight:number;
-    private readonly width:number;
-    private readonly height:number;
-    private readonly scale:number;
-    private isPathCreated:boolean;
+    public color: string;
+    private readonly ctx: CanvasRenderingContext2D;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly canvasWidth: number;
+    private readonly canvasHeight: number;
+    private readonly width: number;
+    private readonly height: number;
+    private readonly scale: number;
+    private isPathCreated: boolean;
 
     constructor(options: ICanvasManagerOptions)
     {
-        const { width, height, scale, canvasWidth, canvasHeight, backgroundColor } = options;
+        const {
+            width,
+            height,
+            scale,
+            canvasWidth,
+            canvasHeight,
+            backgroundColor,
+            color
+        } = options;
 
         /* Some properties */
         this.width = width;
         this.height = height;
         this.scale = scale || 10;
+        this.color = color || 'black';
         this.canvasWidth = canvasWidth || width * this.scale;
         this.canvasHeight = canvasHeight || height * this.scale;
         this.isPathCreated = false;
@@ -52,26 +69,12 @@ class CanvasManager
         parent.appendChild(this.canvas);
     }
 
-    public test()
+    public drawPoint(options: ICanvasDrawOptions)
     {
-        this.ctx.beginPath();
+        const { x, y } = options;
 
-        this.ctx.moveTo(0, this.scale / 2);
-        this.ctx.lineTo(this.width * this.scale, this.scale / 2);
-
-        this.ctx.moveTo(0, this.height * this.scale - this.scale / 2);
-        this.ctx.lineTo(this.width * this.scale, this.height * this.scale - this.scale / 2);
-
-        this.ctx.stroke();
-    }
-
-    public drawPoint(x: number, y: number)
-    {
         this.initPath();
-        this.ctx.rect(x * this.scale + this.scale / 2, y * this.scale + this.scale / 2, this.scale, this.scale);
-        /*this.ctx.moveTo(x * this.scale + this.scale / 2, y * this.scale + this.scale / 2);
-        this.ctx.lineTo((x + 1) * this.scale + this.scale / 2, (y + 1) * this.scale + this.scale / 2);
-        console.log((x + 1) * this.scale + this.scale / 2, (y + 1) * this.scale + this.scale / 2);*/
+        this.ctx.rect(x * this.scale + this.scale / 2, y * this.scale + this.scale / 2, 1, 1);
     }
 
     public render(needToClosePath:boolean = false): boolean
@@ -82,6 +85,8 @@ class CanvasManager
         if (needToClosePath)
             this.ctx.closePath();
 
+        this.ctx.fillStyle = this.color;
+        this.ctx.strokeStyle = this.color;
         this.ctx.stroke();
         this.isPathCreated = false;
     }
@@ -101,15 +106,21 @@ const options = {
     height: 32,
     scale: 100,
     canvasWidth: 640,
-    canvasHeight: 320,
-    backgroundColor: 'white'
+    canvasHeight: 320
 };
 const manager:CanvasManager = new CanvasManager(options);
 
 manager.bind(app);
-//manager.drawPoint(0, 0);
-manager.drawPoint(62, 30);
-manager.render();
+
+for (let x = 0; x < 64; ++x)
+{
+    for (let y = 0; y < 32; ++y)
+    {
+        manager.color = `rgb(${x * 2.9 % 256}, ${y * 3.5 % 256}, ${x * y % 256})`;
+        manager.drawPoint({ x, y });
+        manager.render();
+    }
+}
 
 /*
 ** Specs : http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
