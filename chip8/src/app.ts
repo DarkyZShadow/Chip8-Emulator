@@ -1,27 +1,3 @@
-import { CanvasManager } from './render';
-
-const options = {
-    width: 64,
-    height: 32,
-    scale: 100,
-    canvasWidth: 640,
-    canvasHeight: 320
-};
-const app:HTMLElement = document.getElementById('app');
-const manager:CanvasManager = new CanvasManager(options);
-
-/* Bind manager */
-manager.bind(app);
-
-for (let x = 0; x < 64; ++x)
-{
-    for (let y = 0; y < 32; ++y)
-    {
-        manager.color = `rgb(${x * 2.9 % 256}, ${y * 3.5 % 256}, ${x * y % 256})`;
-        manager.drawPoint({ x, y });
-        manager.render();
-    }
-}
 
 /*
 ** Specs : http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
@@ -81,6 +57,30 @@ for (let x = 0; x < 64; ++x)
 ** Fx75     LD R, Vx
 ** Fx85     LD Vx, R
 */
+
+/*
+** CPU part
+*/
 import CPU from './cpu';
 
 const chip8:CPU = new CPU();
+
+
+/*
+** Render part (temporary)
+*/
+
+import { CanvasManager } from './render';
+
+const options = {
+    width: 64,
+    height: 32,
+    scale: 100,
+    canvasWidth: 640,
+    canvasHeight: 320
+};
+const app:HTMLElement = document.getElementById('app');
+const manager:CanvasManager = new CanvasManager(options);
+
+/* Bind manager */
+manager.bind(app);
