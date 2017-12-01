@@ -1,105 +1,4 @@
-const app:HTMLElement = document.getElementById('app');
-
-interface ICanvasManagerOptions
-{
-    width: number;
-    height: number;
-    scale?: number;
-    canvasWidth?: number;
-    canvasHeight?: number;
-    backgroundColor?: string;
-    color?: string
-}
-
-interface ICanvasDrawOptions
-{
-    x: number;
-    y: number;
-}
-
-class CanvasManager
-{
-    /* Properties */
-    public color: string;
-    private readonly ctx: CanvasRenderingContext2D;
-    private readonly canvas: HTMLCanvasElement;
-    private readonly canvasWidth: number;
-    private readonly canvasHeight: number;
-    private readonly width: number;
-    private readonly height: number;
-    private readonly scale: number;
-    private isPathCreated: boolean;
-
-    constructor(options: ICanvasManagerOptions)
-    {
-        const {
-            width,
-            height,
-            scale,
-            canvasWidth,
-            canvasHeight,
-            backgroundColor,
-            color
-        } = options;
-
-        /* Some properties */
-        this.width = width;
-        this.height = height;
-        this.scale = scale || 10;
-        this.color = color || 'black';
-        this.canvasWidth = canvasWidth || width * this.scale;
-        this.canvasHeight = canvasHeight || height * this.scale;
-        this.isPathCreated = false;
-
-        /* Create canvas */
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = width * this.scale;
-        this.canvas.height = height * this.scale;
-        this.canvas.style.width = this.canvasWidth + 'px';
-        this.canvas.style.height = this.canvasHeight + 'px';
-        this.canvas.style.backgroundColor = backgroundColor || 'transparent';
-
-        /* Setup context */
-        this.ctx = this.canvas.getContext('2d');
-        this.ctx.lineWidth = this.scale;
-    }
-
-    public bind(parent: HTMLElement): void
-    {
-        parent.appendChild(this.canvas);
-    }
-
-    public drawPoint(options: ICanvasDrawOptions)
-    {
-        const { x, y } = options;
-
-        this.initPath();
-        this.ctx.rect(x * this.scale + this.scale / 2, y * this.scale + this.scale / 2, 1, 1);
-    }
-
-    public render(needToClosePath:boolean = false): boolean
-    {
-        if (!this.isPathCreated)
-            return false;
-
-        if (needToClosePath)
-            this.ctx.closePath();
-
-        this.ctx.fillStyle = this.color;
-        this.ctx.strokeStyle = this.color;
-        this.ctx.stroke();
-        this.isPathCreated = false;
-    }
-
-    private initPath()
-    {
-        if (this.isPathCreated)
-            return;
-
-        this.ctx.beginPath();
-        this.isPathCreated = true;
-    }
-}
+import { CanvasManager } from './render';
 
 const options = {
     width: 64,
@@ -108,8 +7,10 @@ const options = {
     canvasWidth: 640,
     canvasHeight: 320
 };
+const app:HTMLElement = document.getElementById('app');
 const manager:CanvasManager = new CanvasManager(options);
 
+/* Bind manager */
 manager.bind(app);
 
 for (let x = 0; x < 64; ++x)
