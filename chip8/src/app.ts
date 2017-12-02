@@ -62,14 +62,6 @@
 ** CPU part
 */
 import CPU from './cpu';
-
-const chip8:CPU = new CPU();
-
-
-/*
-** Render part (temporary)
-*/
-
 import { CanvasManager } from './render';
 
 const options = {
@@ -77,10 +69,15 @@ const options = {
     height: 32,
     scale: 100,
     canvasWidth: 640,
-    canvasHeight: 320
+    canvasHeight: 320,
+    backgroundColor: 'white'
 };
 const app:HTMLElement = document.getElementById('app');
 const manager:CanvasManager = new CanvasManager(options);
+const chip8:CPU = new CPU(manager, 250);
 
 /* Bind manager */
 manager.bind(app);
+
+/* Start */
+chip8.run();
