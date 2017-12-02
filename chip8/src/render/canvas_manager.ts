@@ -4,14 +4,14 @@ class CanvasManager
 {
     /* Properties */
     public color: string;
-    private readonly ctx: CanvasRenderingContext2D;
-    private readonly canvas: HTMLCanvasElement;
-    private readonly canvasWidth: number;
-    private readonly canvasHeight: number;
-    private readonly width: number;
-    private readonly height: number;
-    private readonly scale: number;
-    private isPathCreated: boolean;
+    private readonly _ctx: CanvasRenderingContext2D;
+    private readonly _canvas: HTMLCanvasElement;
+    private readonly _canvasWidth: number;
+    private readonly _canvasHeight: number;
+    private readonly _width: number;
+    private readonly _height: number;
+    private readonly _scale: number;
+    private _isPathCreated: boolean;
 
     constructor(options: ICanvasManagerOptions)
     {
@@ -26,30 +26,30 @@ class CanvasManager
         } = options;
 
         /* Some properties */
-        this.width = width;
-        this.height = height;
-        this.scale = scale || 10;
         this.color = color || 'black';
-        this.canvasWidth = canvasWidth || width * this.scale;
-        this.canvasHeight = canvasHeight || height * this.scale;
-        this.isPathCreated = false;
+        this._width = width;
+        this._height = height;
+        this._scale = scale || 10;
+        this._canvasWidth = canvasWidth || width * this._scale;
+        this._canvasHeight = canvasHeight || height * this._scale;
+        this._isPathCreated = false;
 
         /* Create canvas */
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = width * this.scale;
-        this.canvas.height = height * this.scale;
-        this.canvas.style.width = this.canvasWidth + 'px';
-        this.canvas.style.height = this.canvasHeight + 'px';
-        this.canvas.style.backgroundColor = backgroundColor || 'transparent';
+        this._canvas = document.createElement('canvas');
+        this._canvas.width = width * this._scale;
+        this._canvas.height = height * this._scale;
+        this._canvas.style.width = this._canvasWidth + 'px';
+        this._canvas.style.height = this._canvasHeight + 'px';
+        this._canvas.style.backgroundColor = backgroundColor || 'transparent';
 
         /* Setup context */
-        this.ctx = this.canvas.getContext('2d');
-        this.ctx.lineWidth = this.scale;
+        this._ctx = this._canvas.getContext('2d');
+        this._ctx.lineWidth = this._scale;
     }
 
     public bind(parent: HTMLElement): void
     {
-        parent.appendChild(this.canvas);
+        parent.appendChild(this._canvas);
     }
 
     public drawPoint(options: ICanvasDrawOptions): void
@@ -57,33 +57,33 @@ class CanvasManager
         const { x, y } = options;
 
         this.initPath();
-        this.ctx.rect(this.getDelta(x), this.getDelta(y), 1, 1);
+        this._ctx.rect(this.getDelta(x), this.getDelta(y), 1, 1);
     }
 
     public render(): boolean
     {
-        if (!this.isPathCreated)
+        if (!this._isPathCreated)
             return false;
 
-        this.ctx.fillStyle = this.color;
-        this.ctx.strokeStyle = this.color;
-        this.ctx.stroke();
-        this.isPathCreated = false;
+        this._ctx.fillStyle = this.color;
+        this._ctx.strokeStyle = this.color;
+        this._ctx.stroke();
+        this._isPathCreated = false;
         return true;
     }
 
     private getDelta(n: number): number
     {
-        return n * this.scale + this.scale / 2;
+        return n * this._scale + this._scale / 2;
     }
 
     private initPath(): void
     {
-        if (this.isPathCreated)
+        if (this._isPathCreated)
             return;
 
-        this.ctx.beginPath();
-        this.isPathCreated = true;
+        this._ctx.beginPath();
+        this._isPathCreated = true;
     }
 }
 
