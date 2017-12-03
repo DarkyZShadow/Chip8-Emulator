@@ -58,14 +58,290 @@
 */
 import { IOpcode } from './interfaces';
 
-const opcodes:Array<IOpcode> = [
-    {
-        mask: 'string',
-        id: 0,
-        fn() {
+const opcodes:IOpcode[] = [
+    /*
+    ** --------------------------------
+    **              Chip8
+    ** --------------------------------
+    */
 
-        }
-    }
+	/* CLS */
+	{
+		mask: 0xFFFF,
+		id: 0x00E0,
+		fn() { }
+	},
+	/* RET */
+	{
+		mask: 0xFFFF,
+		id: 0x00EE,
+		fn() { }
+	},
+	/* SYS addr */
+	{
+		mask: 0xF000,
+		id: 0x0000,
+		fn() { }
+	},
+	/* JP addr */
+	{
+		mask: 0xF000,
+		id: 0x1000,
+		fn() { }
+	},
+	/* CALL addr */
+	{
+		mask: 0xF000,
+		id: 0x2000,
+		fn() { }
+	},
+	/* SE Vx, byte */
+	{
+		mask: 0xF000,
+		id: 0x3000,
+		fn() { }
+	},
+	/* SNE Vx, byte */
+	{
+		mask: 0xF000,
+		id: 0x4000,
+		fn() { }
+	},
+	/* SE Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x5000,
+		fn() { }
+	},
+	/* LD Vx, byte */
+	{
+		mask: 0xF000,
+		id: 0x6000,
+		fn() { }
+	},
+	/* ADD Vx, byte */
+	{
+		mask: 0xF000,
+		id: 0x7000,
+		fn() { }
+	},
+	/* LD Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8000,
+		fn() { }
+	},
+	/* OR Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8001,
+		fn() { }
+	},
+	/* AND Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8002,
+		fn() { }
+	},
+	/* XOR Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8003,
+		fn() { }
+	},
+	/* ADD Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8004,
+		fn() { }
+	},
+	/* SUB Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8005,
+		fn() { }
+	},
+	/* SHR Vx {, Vy} */
+	{
+		mask: 0xF00F,
+		id: 0x8006,
+		fn() { }
+	},
+	/* SUBN Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x8007,
+		fn() { }
+	},
+	/* SHL Vx {, Vy} */
+	{
+		mask: 0xF00F,
+		id: 0x800E,
+		fn() { }
+	},
+	/* SNE Vx, Vy */
+	{
+		mask: 0xF00F,
+		id: 0x9000,
+		fn() { }
+	},
+	/* LD I, addr */
+	{
+		mask: 0xF000,
+		id: 0xA000,
+		fn() { }
+	},
+	/* JP V0, addr */
+	{
+		mask: 0xF000,
+		id: 0xB000,
+		fn() { }
+	},
+	/* RND Vx, byte */
+	{
+		mask: 0xF000,
+		id: 0xC000,
+		fn() { }
+	},
+	/* DRW Vx, Vy, nibble */
+	{
+		mask: 0xF000,
+		id: 0xD000,
+		fn() { }
+	},
+	/* SKP Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xE09E,
+		fn() { }
+	},
+	/* SKNP Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xE0A1,
+		fn() { }
+	},
+	/* LD Vx, DT */
+	{
+		mask: 0xF0FF,
+		id: 0xF007,
+		fn() { }
+	},
+	/* LD Vx, K */
+	{
+		mask: 0xF0FF,
+		id: 0xF00A,
+		fn() { }
+	},
+	/* LD DT, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF015,
+		fn() { }
+	},
+	/* LD ST, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF018,
+		fn() { }
+	},
+	/* ADD I, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF01E,
+		fn() { }
+	},
+	/* LD F, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF029,
+		fn() { }
+	},
+	/* LD B, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF033,
+		fn() { }
+	},
+	/* LD [I], Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF055,
+		fn() { }
+	},
+	/* LD Vx, [I] */
+	{
+		mask: 0xF0FF,
+		id: 0xF065,
+		fn() { }
+    },
+
+    /*
+    ** --------------------------------
+    **          Super Chip-48:
+    ** --------------------------------
+    */
+
+	/* SCD nibble */
+	{
+		mask: 0xFFF0,
+		id: 0x00C0,
+		fn() { }
+	},
+	/* SCR */
+	{
+		mask: 0xFFFF,
+		id: 0x00FB,
+		fn() { }
+	},
+	/* SCL */
+	{
+		mask: 0xFFFF,
+		id: 0x00FC,
+		fn() { }
+	},
+	/* EXIT */
+	{
+		mask: 0xFFFF,
+		id: 0x00FD,
+		fn() { }
+	},
+	/* LOW */
+	{
+		mask: 0xFFFF,
+		id: 0x00FE,
+		fn() { }
+	},
+	/* HIGH */
+	{
+		mask: 0xFFFF,
+		id: 0x00FF,
+		fn() { }
+	},
+	/* DRW Vx, Vy, 0 */
+	{
+		mask: 0xF00F,
+		id: 0xD000,
+		fn() { }
+	},
+	/* LD HF, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF030,
+		fn() { }
+	},
+	/* LD R, Vx */
+	{
+		mask: 0xF0FF,
+		id: 0xF075,
+		fn() { }
+	},
+	/* LD Vx, R */
+	{
+		mask: 0xF0FF,
+		id: 0xF085,
+		fn() { }
+	}
 ];
 
 export default opcodes;
