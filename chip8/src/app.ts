@@ -73,11 +73,21 @@ const options = {
     backgroundColor: 'white'
 };
 const app:HTMLElement = document.getElementById('app');
+const loadInput:HTMLElement = document.getElementById('load-input');
 const manager:CanvasManager = new CanvasManager(options);
 const chip8:CPU = new CPU(manager, 250);
 
+loadInput.addEventListener('change', loadRom);
 /* Bind manager */
 manager.bind(app);
 
 /* Start */
 chip8.run();
+
+function loadRom(): void
+{
+    const fr:FileReader = new FileReader();
+
+    fr.onload = (event: any) => chip8.loadRom(event.target.result);
+    fr.readAsArrayBuffer(this.files[0]);
+}

@@ -39,6 +39,11 @@ class CPU
         this._timestep = 1000 / hzFrequency;
     }
 
+    public loadRom(buffer: ArrayBuffer)
+    {
+        this._memory.set(new Uint8Array(buffer), FIRST_ADDRESS);
+    }
+
     public run(): void
     {
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -65,7 +70,7 @@ class CPU
 
     private update(): void
     {
-        console.log('ok');
+        this._canvasManager.drawPoint({ x: Math.random() * 64, y: Math.random() * 32 });
     }
 }
 
