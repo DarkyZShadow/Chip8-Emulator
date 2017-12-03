@@ -1,4 +1,4 @@
-import { CanvasManager } from './render';
+import { CanvasManager } from '../render';
 
 const COUNT_OF_GEN_REGS = 0xF;
 const MEMORY_SIZE = 4096;
@@ -83,7 +83,13 @@ class CPU
 
     private update(): void
     {
-        this._canvasManager.drawPoint({ x: Math.random() * 64, y: Math.random() * 32 });
+        const firstByte = this._memory[this._programCounter];
+        const secondByte = this._memory[this._programCounter + 1];
+        const opcode:number = (firstByte << 8) + secondByte;
+
+        console.log('memory', this);
+
+        this.suspend();
     }
 }
 
