@@ -75,11 +75,13 @@ const options = {
 const app:HTMLElement = document.getElementById('app');
 const loadInput:HTMLElement = document.getElementById('load-input');
 const startButton:HTMLElement = document.getElementById('start-button');
+const suspendButton:HTMLElement = document.getElementById('suspend-button');
 const manager:CanvasManager = new CanvasManager(options);
 const chip8:CPU = new CPU(manager, 250);
 
 loadInput.addEventListener('change', loadRom);
 startButton.addEventListener('click', start);
+suspendButton.addEventListener('click', suspend);
 
 /* Bind manager */
 manager.bind(app);
@@ -95,4 +97,9 @@ function loadRom(): void
 function start(): void
 {
     chip8.run();
+}
+
+function suspend(): void
+{
+    chip8.suspend();
 }

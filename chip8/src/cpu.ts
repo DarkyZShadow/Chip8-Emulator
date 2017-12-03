@@ -7,8 +7,12 @@ const MAX_JUMPS = 16;
 
 class CPU
 {
+    /* General properties */
+    private _animationHandle: number;
     private readonly _frequency: number;
     private readonly _canvasManager: CanvasManager;
+
+    /* Memory properties */
     private readonly _V: Uint8Array;
     private readonly _memory: Uint8Array;
     private readonly _jumps: Uint16Array;
@@ -35,6 +39,7 @@ class CPU
         this._frequency = hzFrequency;
         this._canvasManager = canvasManager;
         this._lastFrameUpdate = -1;
+        this._animationHandle = -1;
         this._delta = 0;
         this._timestep = 1000 / hzFrequency;
     }
@@ -46,7 +51,13 @@ class CPU
 
     public run(): void
     {
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this._animationHandle = requestAnimationFrame(this.gameLoop.bind(this));
+    }
+
+    public suspend(): void
+    {
+        cancelAnimationFrame(this._animationHandle);
+        this._lastFrameUpdate = 0;
     }
 
     private gameLoop(timestamp: number)/*: void*/
@@ -65,7 +76,9 @@ class CPU
         /* Render & set timestamp */
         this._canvasManager.render();
         this._lastFrameUpdate = timestamp;
-        requestAnimationFrame(this.gameLoop.bind(this));
+
+        /* Loop */
+        this._animationHandle = requestAnimationFrame(this.gameLoop.bind(this));
     }
 
     private update(): void
