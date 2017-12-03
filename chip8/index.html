@@ -29,14 +29,21 @@
                 height: 50vh;
                 background-color: purple;
             }
+
+            .wrapper
+            {
+                display: flex;
+            }
         </style>
     </head>
     <body>
         <h1>Chip8 - Emulator</h1>
         <div id="app"></div>
-        <input type="file" id="load-input" />
-        <button id="start-button">Start</button>
-        <button id="suspend-button">Suspend</button>
+        <div class="wrapepr">
+            <input type="file" id="load-input" />
+            <button id="start-button">Start</button>
+            <button id="suspend-button">Suspend</button>
+        </div>
         <script src="chip8.js"></script>
     </body>
 </html>

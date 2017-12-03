@@ -60,7 +60,7 @@ class CPU
         this._lastFrameUpdate = 0;
     }
 
-    private gameLoop(timestamp: number)/*: void*/
+    private gameLoop(timestamp: number): void
     {
         /* Get time since last update */
         if (this._lastFrameUpdate > 0)
