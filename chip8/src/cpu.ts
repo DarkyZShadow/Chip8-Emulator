@@ -9,9 +9,9 @@ class CPU
 {
     private readonly _frequency: number;
     private readonly _canvasManager: CanvasManager;
-    private readonly _V: Int8Array;
-    private readonly _memory: Int8Array;
-    private readonly _jumps: Int16Array;
+    private readonly _V: Uint8Array;
+    private readonly _memory: Uint8Array;
+    private readonly _jumps: Uint16Array;
     private  _I: number;
     private _jumpCounter: number;
     private _gameCounter: number;
@@ -24,9 +24,9 @@ class CPU
     private _timestep: number;
 
     constructor(canvasManager: CanvasManager, hzFrequency: number) {
-        this._V = new Int8Array(COUNT_OF_GEN_REGS + 1);
-        this._memory = new Int8Array(MEMORY_SIZE);
-        this._jumps = new Int16Array(MAX_JUMPS);
+        this._V = new Uint8Array(COUNT_OF_GEN_REGS + 1);
+        this._memory = new Uint8Array(MEMORY_SIZE);
+        this._jumps = new Uint16Array(MAX_JUMPS);
         this._programCounter = FIRST_ADDRESS;
         this._I = 0;
         this._jumpCounter = 0;
