@@ -42,6 +42,17 @@ export function SNE_Vx_Byte(options: IOpcodeOptions): boolean
     return true;
 }
 
+export function SE_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+    const reg1 = cpu.getRegister(byte2);
+    const reg2 = cpu.getRegister(byte3);
+
+    if (reg1 === reg2)
+        cpu.increaseProgramCounter(2);
+    return true;
+}
+
 export function LD_Vx_Byte(options: IOpcodeOptions): boolean
 {
     const { cpu, byte2, byte3, byte4 } = options;
