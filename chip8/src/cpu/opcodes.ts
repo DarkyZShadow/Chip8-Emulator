@@ -88,7 +88,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0x1000,
-		fn: null
+		fn: fn.JMP
 	},
 	/* CALL addr */
 	{
@@ -160,7 +160,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF00F,
 		id: 0x8005,
-		fn: null
+		fn: fn.SUB_Vx_Vy
 	},
 	/* SHR Vx {, Vy} */
 	{
@@ -190,7 +190,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0xA000,
-		fn: null
+		fn: fn.LD_I_Addr
 	},
 	/* JP V0, addr */
 	{
@@ -208,7 +208,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0xD000,
-		fn: null
+		fn: fn.DRW_Vx_Vy_Nibble
 	},
 	/* SKP Vx */
 	{

@@ -353,14 +353,54 @@ export function RND_Vx_Byte(options: IOpcodeOptions): boolean
     return true;
 }
 
-
 /*
 Dxyn - DRW Vx, Vy, nibble
 Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
 
 The interpreter reads n bytes from memory, starting at the address stored in I. These bytes are then displayed as sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto the existing screen. If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the coordinates of the display, it wraps around to the opposite side of the screen. See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
+*/
+export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
+{
+    /* 0 1 8 */
+    const { cpu, byte2, byte3, byte4 } = options;
+    const buffer: Uint8Array = cpu.memory.slice(cpu.I, cpu.I + byte4);
+    let vx = cpu.getRegister(byte2);
+    let vy = cpu.getRegister(byte3);
+
+    cpu.setRegister(0x0F, 0);
+
+    /* TODO: Draw */
+    /*
+    ** These bytes are then displayed as sprites on screen at coordinates (Vx, Vy).
+    ** Sprites are XORed onto the existing screen.
+    ** If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
+    ** If the sprite is positioned so part of it is outside the coordinates of the display,
+    **   it wraps around to the opposite side of the screen.
+    */
+    for (let y = 0; y < byte4; ++y)
+    {
+        let line = buffer[y];
+        let mask = 1;
+
+        for (let x = 0; x < 8; ++x)
+        {
+            /*
+            ** x, y     = buffer[y] & 0b10000000‬ >> 7
+            ** x+1, y   = buffer[y] & 0b01000000 >> 6
+            ** ...
+            ** x+7, y   = buffer[y] & 0b00000001 >> 0
+            */
+            if (((line & mask) >> x) === 1)
+                cpu.canvasManager.drawPoint({ x: 7 - x + vx, y: y + vy });
+            mask *= 2;
+        }
+    }
+    cpu.canvasManager.render();
+    return true;
+}
 
 
+/*
 Ex9E - SKP Vx
 Skip next instruction if key with the value of Vx is pressed.
 

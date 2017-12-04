@@ -64,6 +64,9 @@ class CanvasManager
     {
         const { x, y } = options;
 
+        if (x < 0 || x >= this._width || y < 0 || y >= this._height)
+            return;
+
         this.initPath();
         this._ctx.rect(this.getDelta(x), this.getDelta(y), 1, 1);
     }

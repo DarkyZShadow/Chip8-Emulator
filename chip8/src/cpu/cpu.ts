@@ -53,19 +53,24 @@ class CPU
         return this._canvasManager;
     }
 
-    public set programCounter(value: number)
-    {
-        this._programCounter = (value & 0xFFF);
-    }
-
     public get programCounter(): number
     {
         return this._programCounter;
     }
 
+    public set programCounter(value: number)
+    {
+        this._programCounter = (value & 0xFFF);
+    }
+
     public get memory(): Uint8Array
     {
         return this._memory;
+    }
+
+    public get I(): number
+    {
+        return this._I;
     }
 
     public set I(value: number)
