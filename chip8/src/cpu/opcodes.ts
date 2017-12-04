@@ -106,7 +106,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0x4000,
-		fn: null
+		fn: fn.SNE_Vx_Byte
 	},
 	/* SE Vx, Vy */
 	{
