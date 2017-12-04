@@ -1,6 +1,7 @@
 import opcodes from './opcodes';
 import { IOpcode } from './interfaces';
 import { CanvasManager } from '../render';
+import { spriteNumbers } from './constants';
 import { UnknownRegisterError } from '../errors';
 
 const COUNT_OF_GEN_REGS = 0xF;
@@ -42,6 +43,8 @@ class CPU
         this._animationHandle = -1;
         this._delta = 0;
         this._timestep = 1000 / hzFrequency;
+
+        this.loadSprites();
     }
 
     /*
@@ -143,6 +146,11 @@ class CPU
     /*
     ** Private functions
     */
+
+    private loadSprites(): void
+    {
+        this._memory.set([].concat(...spriteNumbers));
+    }
 
     private gameLoop(timestamp: number): void
     {

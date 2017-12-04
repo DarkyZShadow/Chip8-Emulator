@@ -354,10 +354,10 @@ export function RND_Vx_Byte(options: IOpcodeOptions): boolean
 }
 
 /*
-Dxyn - DRW Vx, Vy, nibble
-Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
-
-The interpreter reads n bytes from memory, starting at the address stored in I. These bytes are then displayed as sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto the existing screen. If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the coordinates of the display, it wraps around to the opposite side of the screen. See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
+** Dxyn - DRW Vx, Vy, nibble
+** Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
+**
+** The interpreter reads n bytes from memory, starting at the address stored in I. These bytes are then displayed as sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto the existing screen. If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the coordinates of the display, it wraps around to the opposite side of the screen. See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
 */
 export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
 {
@@ -441,14 +441,32 @@ Fx1E - ADD I, Vx
 Set I = I + Vx.
 
 The values of I and Vx are added, and the results are stored in I.
+*/
 
 
-Fx29 - LD F, Vx
-Set I = location of sprite for digit Vx.
 
-The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+/*
+** Fx29 - LD F, Vx
+** Set I = location of sprite for digit Vx.
+**
+** The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+*/
+export function LD_F_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2 } = options;
+
+    /*
+    ** 1 = 0 -> 4
+    ** 2 = 5 -> 9
+    ** ...
+    ** F = 4B -> 4F
+    */
+    cpu.I = cpu.getRegister(byte2) * 5;
+    return true;
+}
 
 
+/*
 Fx33 - LD B, Vx
 Store BCD representation of Vx in memory locations I, I+1, and I+2.
 

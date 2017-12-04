@@ -58,6 +58,7 @@
 */
 import { IOpcode } from './interfaces';
 import * as fn from './opcodes_fn';
+import { RND_Vx_Byte } from './opcodes_fn';
 
 const opcodes:IOpcode[] = [
     /*
@@ -202,7 +203,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0xC000,
-		fn: null
+		fn: RND_Vx_Byte
 	},
 	/* DRW Vx, Vy, nibble */
 	{
@@ -256,7 +257,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF0FF,
 		id: 0xF029,
-		fn: null
+		fn: fn.LD_F_Vx
 	},
 	/* LD B, Vx */
 	{
