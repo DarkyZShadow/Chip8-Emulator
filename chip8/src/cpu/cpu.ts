@@ -1,6 +1,7 @@
-import { CanvasManager } from '../render';
 import opcodes from './opcodes';
 import { IOpcode } from './interfaces';
+import { CanvasManager } from '../render';
+import { UnknownRegisterError } from '../errors';
 
 const COUNT_OF_GEN_REGS = 0xF;
 const MEMORY_SIZE = 4096;
@@ -93,6 +94,12 @@ class CPU
         return result;
     }
 
+    public setRegister(registerId: number, value: number): void
+    {
+        if (registerId < 0 || registerId > COUNT_OF_GEN_REGS)
+            throw new UnknownRegisterError(registerId);
+    }
+
     private gameLoop(timestamp: number): void
     {
         /* Get time since last update */
@@ -122,6 +129,13 @@ class CPU
         const op:IOpcode = opcodes.find((op: IOpcode): boolean => {
             return (opcode & op.mask) === op.id;
         });
+
+        if (!op.fn)
+        {
+            console.log('opcode:', opcode.toString(16));
+            console.log('OP:', op.id.toString(16));
+            console.log(this);
+        }
 
         if (op.fn({ cpu: this }) === true)
             this._programCounter += 2;

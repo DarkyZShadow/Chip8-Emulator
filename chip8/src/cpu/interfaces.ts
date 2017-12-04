@@ -10,9 +10,9 @@ interface IOpcode
 interface IOpcodeOptions
 {
     cpu: CPU;
-    byte1: number;
     byte2: number;
     byte3: number;
+    byte4: number;
 }
 
 export { IOpcode, IOpcodeOptions };

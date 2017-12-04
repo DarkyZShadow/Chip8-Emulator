@@ -14,7 +14,7 @@ const loadInput:HTMLElement = document.getElementById('load-input');
 const startButton:HTMLElement = document.getElementById('start-button');
 const suspendButton:HTMLElement = document.getElementById('suspend-button');
 const manager:CanvasManager = new CanvasManager(options);
-const chip8:CPU = new CPU(manager, 1);
+const chip8:CPU = new CPU(manager, 250);
 
 loadInput.addEventListener('change', loadRom);
 startButton.addEventListener('click', start);

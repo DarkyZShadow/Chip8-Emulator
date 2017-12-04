@@ -1,7 +1,7 @@
 class UnknownRegisterError extends Error
 {
-	constructor(registerName: string) {
-        super('Unknow register named ' + registerName);
+	constructor(registerName: number) {
+        super('Unknow register with id ' + registerName);
     }
 }
 

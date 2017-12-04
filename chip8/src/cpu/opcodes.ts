@@ -118,7 +118,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0x6000,
-		fn: null
+		fn: fn.LD_Vx_Byte
 	},
 	/* ADD Vx, byte */
 	{
