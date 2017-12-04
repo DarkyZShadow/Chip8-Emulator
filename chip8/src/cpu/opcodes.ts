@@ -65,6 +65,12 @@ const opcodes:IOpcode[] = [
     ** --------------------------------
     */
 
+    /* SYS addr (unused) */
+	{
+		mask: 0xF000,
+		id: 0x0000,
+		fn() { }
+	},
 	/* CLS */
 	{
 		mask: 0xFFFF,
@@ -75,12 +81,6 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xFFFF,
 		id: 0x00EE,
-		fn() { }
-	},
-	/* SYS addr */
-	{
-		mask: 0xF000,
-		id: 0x0000,
 		fn() { }
 	},
 	/* JP addr */

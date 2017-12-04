@@ -15,11 +15,9 @@ class CPU
     /* Memory properties */
     private readonly _V: Uint8Array;
     private readonly _memory: Uint8Array;
-    private readonly _jumps: Uint16Array;
+    private readonly _stack: Uint16Array;
     private  _I: number;
-    private _jumpCounter: number;
-    private _gameCounter: number;
-    private _soundCounter: number;
+    private _stackPointer: number;
     private _programCounter: number;
 
     /* Update counter*/
@@ -30,12 +28,10 @@ class CPU
     constructor(canvasManager: CanvasManager, hzFrequency: number) {
         this._V = new Uint8Array(COUNT_OF_GEN_REGS + 1);
         this._memory = new Uint8Array(MEMORY_SIZE);
-        this._jumps = new Uint16Array(MAX_JUMPS);
+        this._stack = new Uint16Array(MAX_JUMPS);
         this._programCounter = FIRST_ADDRESS;
         this._I = 0;
-        this._jumpCounter = 0;
-        this._gameCounter = 0;
-        this._soundCounter = 0;
+        this._stackPointer = 0;
         this._frequency = hzFrequency;
         this._canvasManager = canvasManager;
         this._lastFrameUpdate = -1;
@@ -87,9 +83,6 @@ class CPU
         const secondByte = this._memory[this._programCounter + 1];
         const opcode:number = (firstByte << 8) + secondByte;
 
-        console.log('memory', this);
-
-        this.suspend();
     }
 }
 
