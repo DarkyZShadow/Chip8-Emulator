@@ -148,39 +148,96 @@ export function ADD_Vx_Byte(options: IOpcodeOptions): boolean
 **
 ** Stores the value of register Vy in register Vx.
 */
+export function LD_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+
+    cpu.setRegister(byte2, cpu.getRegister(byte3));
+    return true;
+}
+
+/*
+** 8xy1 - OR Vx, Vy
+** Set Vx = Vx OR Vy.
+**
+** Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
+*/
+export function OR_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+
+    cpu.setRegister(byte2, cpu.getRegister(byte2) | cpu.getRegister(byte3));
+    return true;
+}
+
+/*
+** 8xy2 - AND Vx, Vy
+** Set Vx = Vx AND Vy.
+**
+** Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+*/
+export function AND_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+
+    cpu.setRegister(byte2, cpu.getRegister(byte2) & cpu.getRegister(byte3));
+    return true;
+}
+
+/*
+** 8xy3 - XOR Vx, Vy
+** Set Vx = Vx XOR Vy.
+**
+** Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx. An exclusive OR compares the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
+*/
+export function XOR_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+
+    cpu.setRegister(byte2, cpu.getRegister(byte2) ^ cpu.getRegister(byte3));
+    return true;
+}
+
+/*
+** 8xy4 - ADD Vx, Vy
+** Set Vx = Vx + Vy, set VF = carry.
+**
+** The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+*/
+export function ADD_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+    const vx = cpu.getRegister(byte2);
+    const vy = cpu.getRegister(byte3);
+
+    if ((vx + vy) > 0xFF)
+        cpu.setRegister(0x0F, 1);
+
+    cpu.setRegister(byte2, (vx + vy) & 0xFF);
+    return true;
+}
+
+/*
+** 8xy5 - SUB Vx, Vy
+** Set Vx = Vx - Vy, set VF = NOT borrow.
+**
+** If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
+*/
+export function SUB_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+    const vx = cpu.getRegister(byte2);
+    const vy = cpu.getRegister(byte3);
+
+    if (vx > vy)
+        cpu.setRegister(0x0F, 1);
+
+    cpu.setRegister(byte2, (vx - vy) & 0xFF);
+    return true;
+}
 
 
 /*
-8xy1 - OR Vx, Vy
-Set Vx = Vx OR Vy.
-
-Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
-
-
-8xy2 - AND Vx, Vy
-Set Vx = Vx AND Vy.
-
-Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
-
-
-8xy3 - XOR Vx, Vy
-Set Vx = Vx XOR Vy.
-
-Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx. An exclusive OR compares the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
-
-
-8xy4 - ADD Vx, Vy
-Set Vx = Vx + Vy, set VF = carry.
-
-The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
-
-
-8xy5 - SUB Vx, Vy
-Set Vx = Vx - Vy, set VF = NOT borrow.
-
-If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
-
-
 8xy6 - SHR Vx {, Vy}
 Set Vx = Vx SHR 1.
 
