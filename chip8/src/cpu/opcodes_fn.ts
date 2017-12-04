@@ -236,50 +236,125 @@ export function SUB_Vx_Vy(options: IOpcodeOptions): boolean
     return true;
 }
 
+/*
+** /!\ Not sure ! /!\
+**
+** 8xy6 - SHR Vx {, Vy}
+** Set Vx = Vx SHR 1.
+**
+** If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
+*/
+export function SHR_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2 } = options;
+    const vx = cpu.getRegister(byte2);
+
+    cpu.setRegister(0x0F, vx & 0x01);
+    cpu.setRegister(byte2, vx >> 0x01);
+    return true;
+}
 
 /*
-8xy6 - SHR Vx {, Vy}
-Set Vx = Vx SHR 1.
+** 8xy7 - SUBN Vx, Vy
+** Set Vx = Vy - Vx, set VF = NOT borrow.
+**
+** If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
+*/
+export function SUBN_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+    const vx = cpu.getRegister(byte2);
+    const vy = cpu.getRegister(byte3);
 
-If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
+    if (vy > vx)
+        cpu.setRegister(0x0F, 1);
+
+    cpu.setRegister(byte2, (vy - vx) & 0xFF);
+    return true;
+}
+
+/*
+** 8xyE - SHL Vx {, Vy}
+** Set Vx = Vx SHL 1.
+**
+** If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
+*/
+export function SHL_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2 } = options;
+    const vx = cpu.getRegister(byte2);
+
+    cpu.setRegister(0x0F, vx >> 0x07);
+    cpu.setRegister(byte2, vx << 0x01);
+    return true;
+}
+
+/*
+** 9xy0 - SNE Vx, Vy
+** Skip next instruction if Vx != Vy.
+**
+** The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
+*/
+export function SNE_Vx_Vy(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3 } = options;
+    const vx = cpu.getRegister(byte2);
+    const vy = cpu.getRegister(byte3);
+
+    if (vx !== vy)
+        cpu.increaseProgramCounter(2);
+    return true;
+}
+
+/*
+** Annn - LD I, addr
+** Set I = nnn.
+**
+** The value of register I is set to nnn.
+*/
+export function LD_I_Addr(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3, byte4 } = options;
+    const address = (byte2 << 8) + (byte3 << 4) + byte4;
+
+    cpu.I = address;
+    return true;
+}
+
+/*
+** Bnnn - JP V0, addr
+** Jump to location nnn + V0.
+**
+** The program counter is set to nnn plus the value of V0.
+*/
+export function JP_V0_Addr(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3, byte4 } = options;
+    const address = (byte2 << 8) + (byte3 << 4) + byte4;
+    const v0 = cpu.getRegister(0x00);
+
+    cpu.programCounter = address + v0;
+    return true;
+}
+
+/*
+** Cxkk - RND Vx, byte
+** Set Vx = random byte AND kk.
+**
+** The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
+*/
+export function RND_Vx_Byte(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3, byte4 } = options;
+    const byte = (byte3 << 4) + byte4;
+    const rand = Math.floor(Math.random() * 0xFF);
+
+    cpu.setRegister(byte2, rand & byte);
+    return true;
+}
 
 
-8xy7 - SUBN Vx, Vy
-Set Vx = Vy - Vx, set VF = NOT borrow.
-
-If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
-
-
-8xyE - SHL Vx {, Vy}
-Set Vx = Vx SHL 1.
-
-If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
-
-
-9xy0 - SNE Vx, Vy
-Skip next instruction if Vx != Vy.
-
-The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
-
-
-Annn - LD I, addr
-Set I = nnn.
-
-The value of register I is set to nnn.
-
-
-Bnnn - JP V0, addr
-Jump to location nnn + V0.
-
-The program counter is set to nnn plus the value of V0.
-
-
-Cxkk - RND Vx, byte
-Set Vx = random byte AND kk.
-
-The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
-
-
+/*
 Dxyn - DRW Vx, Vy, nibble
 Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
 
