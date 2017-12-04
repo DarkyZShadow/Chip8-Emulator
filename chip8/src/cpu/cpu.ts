@@ -27,6 +27,7 @@ class CPU
     private _delta: number;
     private _timestep: number;
 
+    /* Constructor */
     constructor(canvasManager: CanvasManager, hzFrequency: number) {
         this._V = new Uint8Array(COUNT_OF_GEN_REGS + 1);
         this._memory = new Uint8Array(MEMORY_SIZE);
@@ -42,10 +43,23 @@ class CPU
         this._timestep = 1000 / hzFrequency;
     }
 
+    /*
+    ** Getters/Setters
+    */
+
     public get canvasManager(): CanvasManager
     {
         return this._canvasManager;
     }
+
+    public set programCounter(value: number)
+    {
+        this._programCounter = value;
+    }
+
+    /*
+    ** Functions
+    */
 
     public loadRom(buffer: ArrayBuffer)
     {
@@ -61,6 +75,22 @@ class CPU
     {
         cancelAnimationFrame(this._animationHandle);
         this._lastFrameUpdate = 0;
+    }
+
+    public pushStack(value: number): void
+    {
+        this._stack[this._stackPointer] = value;
+        this._stackPointer++;
+    }
+
+    public popStack(): number
+    {
+        let result;
+
+        this._stackPointer--;
+        result = this._stack[this._stackPointer];
+        this._stack[this._stackPointer] = 0;
+        return result;
     }
 
     private gameLoop(timestamp: number): void
@@ -93,8 +123,8 @@ class CPU
             return (opcode & op.mask) === op.id;
         });
 
-        op.fn({ cpu: this });
-        this._programCounter += 2;
+        if (op.fn({ cpu: this }) === true)
+            this._programCounter += 2;
     }
 }
 

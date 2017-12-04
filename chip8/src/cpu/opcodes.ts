@@ -82,7 +82,7 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xFFFF,
 		id: 0x00EE,
-		fn: null
+		fn: fn.RET
 	},
 	/* JP addr */
 	{
