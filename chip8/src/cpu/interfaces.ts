@@ -1,3 +1,5 @@
+import CPU from './cpu';
+
 interface IOpcode
 {
     mask: number;
@@ -5,4 +7,9 @@ interface IOpcode
     fn: Function;
 }
 
-export { IOpcode };
+interface IOpcodeOptions
+{
+    cpu: CPU;
+}
+
+export { IOpcode, IOpcodeOptions };

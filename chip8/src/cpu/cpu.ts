@@ -1,4 +1,6 @@
 import { CanvasManager } from '../render';
+import opcodes from './opcodes';
+import { IOpcode } from './interfaces';
 
 const COUNT_OF_GEN_REGS = 0xF;
 const MEMORY_SIZE = 4096;
@@ -38,6 +40,11 @@ class CPU
         this._animationHandle = -1;
         this._delta = 0;
         this._timestep = 1000 / hzFrequency;
+    }
+
+    public get canvasManager(): CanvasManager
+    {
+        return this._canvasManager;
     }
 
     public loadRom(buffer: ArrayBuffer)
@@ -82,7 +89,12 @@ class CPU
         const firstByte = this._memory[this._programCounter];
         const secondByte = this._memory[this._programCounter + 1];
         const opcode:number = (firstByte << 8) + secondByte;
+        const op:IOpcode = opcodes.find((op: IOpcode): boolean => {
+            return (opcode & op.mask) === op.id;
+        });
 
+        op.fn({ cpu: this });
+        this._programCounter += 2;
     }
 }
 

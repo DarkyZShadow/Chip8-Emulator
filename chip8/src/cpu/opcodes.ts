@@ -57,6 +57,7 @@
 ** Fx85     LD Vx, R
 */
 import { IOpcode } from './interfaces';
+import * as fn from './opcodes_fn';
 
 const opcodes:IOpcode[] = [
     /*
@@ -69,211 +70,211 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xF000,
 		id: 0x0000,
-		fn() { }
+		fn: fn.NOP
 	},
 	/* CLS */
 	{
 		mask: 0xFFFF,
 		id: 0x00E0,
-		fn() { }
+		fn: fn.CLS
 	},
 	/* RET */
 	{
 		mask: 0xFFFF,
 		id: 0x00EE,
-		fn() { }
+		fn: null
 	},
 	/* JP addr */
 	{
 		mask: 0xF000,
 		id: 0x1000,
-		fn() { }
+		fn: null
 	},
 	/* CALL addr */
 	{
 		mask: 0xF000,
 		id: 0x2000,
-		fn() { }
+		fn: null
 	},
 	/* SE Vx, byte */
 	{
 		mask: 0xF000,
 		id: 0x3000,
-		fn() { }
+		fn: null
 	},
 	/* SNE Vx, byte */
 	{
 		mask: 0xF000,
 		id: 0x4000,
-		fn() { }
+		fn: null
 	},
 	/* SE Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x5000,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, byte */
 	{
 		mask: 0xF000,
 		id: 0x6000,
-		fn() { }
+		fn: null
 	},
 	/* ADD Vx, byte */
 	{
 		mask: 0xF000,
 		id: 0x7000,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8000,
-		fn() { }
+		fn: null
 	},
 	/* OR Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8001,
-		fn() { }
+		fn: null
 	},
 	/* AND Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8002,
-		fn() { }
+		fn: null
 	},
 	/* XOR Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8003,
-		fn() { }
+		fn: null
 	},
 	/* ADD Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8004,
-		fn() { }
+		fn: null
 	},
 	/* SUB Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8005,
-		fn() { }
+		fn: null
 	},
 	/* SHR Vx {, Vy} */
 	{
 		mask: 0xF00F,
 		id: 0x8006,
-		fn() { }
+		fn: null
 	},
 	/* SUBN Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x8007,
-		fn() { }
+		fn: null
 	},
 	/* SHL Vx {, Vy} */
 	{
 		mask: 0xF00F,
 		id: 0x800E,
-		fn() { }
+		fn: null
 	},
 	/* SNE Vx, Vy */
 	{
 		mask: 0xF00F,
 		id: 0x9000,
-		fn() { }
+		fn: null
 	},
 	/* LD I, addr */
 	{
 		mask: 0xF000,
 		id: 0xA000,
-		fn() { }
+		fn: null
 	},
 	/* JP V0, addr */
 	{
 		mask: 0xF000,
 		id: 0xB000,
-		fn() { }
+		fn: null
 	},
 	/* RND Vx, byte */
 	{
 		mask: 0xF000,
 		id: 0xC000,
-		fn() { }
+		fn: null
 	},
 	/* DRW Vx, Vy, nibble */
 	{
 		mask: 0xF000,
 		id: 0xD000,
-		fn() { }
+		fn: null
 	},
 	/* SKP Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xE09E,
-		fn() { }
+		fn: null
 	},
 	/* SKNP Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xE0A1,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, DT */
 	{
 		mask: 0xF0FF,
 		id: 0xF007,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, K */
 	{
 		mask: 0xF0FF,
 		id: 0xF00A,
-		fn() { }
+		fn: null
 	},
 	/* LD DT, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF015,
-		fn() { }
+		fn: null
 	},
 	/* LD ST, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF018,
-		fn() { }
+		fn: null
 	},
 	/* ADD I, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF01E,
-		fn() { }
+		fn: null
 	},
 	/* LD F, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF029,
-		fn() { }
+		fn: null
 	},
 	/* LD B, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF033,
-		fn() { }
+		fn: null
 	},
 	/* LD [I], Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF055,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, [I] */
 	{
 		mask: 0xF0FF,
 		id: 0xF065,
-		fn() { }
+		fn: null
     },
 
     /*
@@ -286,61 +287,61 @@ const opcodes:IOpcode[] = [
 	{
 		mask: 0xFFF0,
 		id: 0x00C0,
-		fn() { }
+		fn: null
 	},
 	/* SCR */
 	{
 		mask: 0xFFFF,
 		id: 0x00FB,
-		fn() { }
+		fn: null
 	},
 	/* SCL */
 	{
 		mask: 0xFFFF,
 		id: 0x00FC,
-		fn() { }
+		fn: null
 	},
 	/* EXIT */
 	{
 		mask: 0xFFFF,
 		id: 0x00FD,
-		fn() { }
+		fn: null
 	},
 	/* LOW */
 	{
 		mask: 0xFFFF,
 		id: 0x00FE,
-		fn() { }
+		fn: null
 	},
 	/* HIGH */
 	{
 		mask: 0xFFFF,
 		id: 0x00FF,
-		fn() { }
+		fn: null
 	},
 	/* DRW Vx, Vy, 0 */
 	{
 		mask: 0xF00F,
 		id: 0xD000,
-		fn() { }
+		fn: null
 	},
 	/* LD HF, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF030,
-		fn() { }
+		fn: null
 	},
 	/* LD R, Vx */
 	{
 		mask: 0xF0FF,
 		id: 0xF075,
-		fn() { }
+		fn: null
 	},
 	/* LD Vx, R */
 	{
 		mask: 0xF0FF,
 		id: 0xF085,
-		fn() { }
+		fn: null
 	}
 ];
 

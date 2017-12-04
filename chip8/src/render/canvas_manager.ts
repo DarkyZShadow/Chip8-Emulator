@@ -52,6 +52,14 @@ class CanvasManager
         parent.appendChild(this._canvas);
     }
 
+    public clear(): void
+    {
+        this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+
+        if (this._isPathCreated)
+            this._ctx.beginPath();
+    }
+
     public drawPoint(options: ICanvasDrawOptions): void
     {
         const { x, y } = options;
