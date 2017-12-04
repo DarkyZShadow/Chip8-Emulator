@@ -61,3 +61,12 @@ export function LD_Vx_Byte(options: IOpcodeOptions): boolean
     cpu.setRegister(byte2, byte);
     return true;
 }
+
+export function ADD_Vx_Byte(options: IOpcodeOptions): boolean
+{
+    const { cpu, byte2, byte3, byte4 } = options;
+    const byte = (byte3 << 4) + byte4;
+
+    cpu.setRegister(byte2, cpu.getRegister(byte2) + byte);
+    return true;
+}
