@@ -347,9 +347,8 @@ export function RND_Vx_Byte(options: IOpcodeOptions): boolean
 {
     const { cpu, byte2, byte3, byte4 } = options;
     const byte = (byte3 << 4) + byte4;
-    const rand = Math.floor(Math.random() * 0xFF);
 
-    cpu.setRegister(byte2, rand & byte);
+    cpu.setRegister(byte2, Math.floor(Math.random() * byte));
     return true;
 }
 
