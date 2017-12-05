@@ -40,10 +40,9 @@ export function RET(options: IOpcodeOptions): boolean
 */
 export function JMP(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const address = (byte2 << 8) + (byte3 << 4) + byte4;
+    const { cpu, nnn } = options;
 
-    cpu.programCounter = address;
+    cpu.programCounter = nnn;
     return false;
 }
 
@@ -55,11 +54,10 @@ export function JMP(options: IOpcodeOptions): boolean
 */
 export function CALL(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const address = (byte2 << 8) + (byte3 << 4) + byte4;
+    const { cpu, nnn } = options;
 
-    cpu.pushStack(address);
-    cpu.programCounter = address;
+    cpu.pushStack(nnn);
+    cpu.programCounter = nnn;
     return false;
 }
 
@@ -71,10 +69,9 @@ export function CALL(options: IOpcodeOptions): boolean
 */
 export function SE_Vx_Byte(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const byte = (byte3 << 4) + byte4;
+    const { cpu,x, kk } = options;
 
-    if (cpu.getRegister(byte2) === byte)
+    if (cpu.getRegister(x) === kk)
         cpu.increaseProgramCounter(2);
     return true;
 }
@@ -87,10 +84,9 @@ export function SE_Vx_Byte(options: IOpcodeOptions): boolean
 */
 export function SNE_Vx_Byte(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const byte = (byte3 << 4) + byte4;
+    const { cpu, x, kk } = options;
 
-    if (cpu.getRegister(byte2) !== byte)
+    if (cpu.getRegister(x) !== kk)
         cpu.increaseProgramCounter(2);
     return true;
 }
@@ -103,11 +99,9 @@ export function SNE_Vx_Byte(options: IOpcodeOptions): boolean
 */
 export function SE_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
-    const reg1 = cpu.getRegister(byte2);
-    const reg2 = cpu.getRegister(byte3);
+    const { cpu, x, y } = options;
 
-    if (reg1 === reg2)
+    if (cpu.getRegister(x) === cpu.getRegister(y))
         cpu.increaseProgramCounter(2);
     return true;
 }
@@ -120,10 +114,9 @@ export function SE_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function LD_Vx_Byte(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const byte = (byte3 << 4) + byte4;
+    const { cpu, x, kk } = options;
 
-    cpu.setRegister(byte2, byte);
+    cpu.setRegister(x, kk);
     return true;
 }
 
@@ -135,10 +128,9 @@ export function LD_Vx_Byte(options: IOpcodeOptions): boolean
 */
 export function ADD_Vx_Byte(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const byte = (byte3 << 4) + byte4;
+    const { cpu, x, kk } = options;
 
-    cpu.setRegister(byte2, cpu.getRegister(byte2) + byte);
+    cpu.increaseRegister(x, kk);
     return true;
 }
 
@@ -150,9 +142,9 @@ export function ADD_Vx_Byte(options: IOpcodeOptions): boolean
 */
 export function LD_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
+    const { cpu, x, y } = options;
 
-    cpu.setRegister(byte2, cpu.getRegister(byte3));
+    cpu.setRegister(x, cpu.getRegister(y));
     return true;
 }
 
@@ -164,9 +156,9 @@ export function LD_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function OR_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
+    const { cpu, x, y } = options;
 
-    cpu.setRegister(byte2, cpu.getRegister(byte2) | cpu.getRegister(byte3));
+    cpu.setRegister(x, cpu.getRegister(x) | cpu.getRegister(y));
     return true;
 }
 
@@ -178,9 +170,9 @@ export function OR_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function AND_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
+    const { cpu, x, y } = options;
 
-    cpu.setRegister(byte2, cpu.getRegister(byte2) & cpu.getRegister(byte3));
+    cpu.setRegister(x, cpu.getRegister(x) & cpu.getRegister(y));
     return true;
 }
 
@@ -192,9 +184,9 @@ export function AND_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function XOR_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
+    const { cpu, x, y } = options;
 
-    cpu.setRegister(byte2, cpu.getRegister(byte2) ^ cpu.getRegister(byte3));
+    cpu.setRegister(x, cpu.getRegister(x) ^ cpu.getRegister(y));
     return true;
 }
 
@@ -206,14 +198,21 @@ export function XOR_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function ADD_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
-    const vx = cpu.getRegister(byte2);
-    const vy = cpu.getRegister(byte3);
+    const { cpu, x, y } = options;
+    const vx = cpu.getRegister(x);
+    const vy = cpu.getRegister(y);
+    const result = vx + vy;
 
-    if ((vx + vy) > 0xFF)
-        cpu.setRegister(0x0F, 1);
+    if (result > 0xFF)
+    {
+        cpu.setRegister(0xF, 1);
+    }
+    else
+    {
+        cpu.setRegister(0xF, 0);
+    }
 
-    cpu.setRegister(byte2, (vx + vy) & 0xFF);
+    cpu.setRegister(x, result);
     return true;
 }
 
@@ -225,14 +224,20 @@ export function ADD_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function SUB_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
-    const vx = cpu.getRegister(byte2);
-    const vy = cpu.getRegister(byte3);
+    const { cpu, x, y } = options;
+    const vx = cpu.getRegister(x);
+    const vy = cpu.getRegister(y);
 
     if (vx > vy)
-        cpu.setRegister(0x0F, 1);
+    {
+        cpu.setRegister(0xF, 1);
+    }
+    else
+    {
+        cpu.setRegister(0xF, 0);
+    }
 
-    cpu.setRegister(byte2, (vx - vy) & 0xFF);
+    cpu.setRegister(x, vx - vy);
     return true;
 }
 
@@ -246,11 +251,11 @@ export function SUB_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function SHR_Vx(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2 } = options;
-    const vx = cpu.getRegister(byte2);
+    const { cpu, x } = options;
+    const vx = cpu.getRegister(x);
 
-    cpu.setRegister(0x0F, vx & 0x01);
-    cpu.setRegister(byte2, vx >> 0x01);
+    cpu.setRegister(0xF, vx & 0x01);
+    cpu.setRegister(x, vx >> 0x01);
     return true;
 }
 
@@ -262,14 +267,20 @@ export function SHR_Vx(options: IOpcodeOptions): boolean
 */
 export function SUBN_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
-    const vx = cpu.getRegister(byte2);
-    const vy = cpu.getRegister(byte3);
+    const { cpu, x, y } = options;
+    const vx = cpu.getRegister(x);
+    const vy = cpu.getRegister(y);
 
     if (vy > vx)
-        cpu.setRegister(0x0F, 1);
+    {
+        cpu.setRegister(0xF, 1);
+    }
+    else
+    {
+        cpu.setRegister(0xF, 0);
+    }
 
-    cpu.setRegister(byte2, (vy - vx) & 0xFF);
+    cpu.setRegister(x, vy - vx);
     return true;
 }
 
@@ -281,11 +292,11 @@ export function SUBN_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function SHL_Vx(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2 } = options;
-    const vx = cpu.getRegister(byte2);
+    const { cpu, x } = options;
+    const vx = cpu.getRegister(x);
 
-    cpu.setRegister(0x0F, vx >> 0x07);
-    cpu.setRegister(byte2, vx << 0x01);
+    cpu.setRegister(0xF, vx >> 0x07);
+    cpu.setRegister(x, vx << 0x01);
     return true;
 }
 
@@ -297,9 +308,9 @@ export function SHL_Vx(options: IOpcodeOptions): boolean
 */
 export function SNE_Vx_Vy(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3 } = options;
-    const vx = cpu.getRegister(byte2);
-    const vy = cpu.getRegister(byte3);
+    const { cpu, x, y } = options;
+    const vx = cpu.getRegister(x);
+    const vy = cpu.getRegister(y);
 
     if (vx !== vy)
         cpu.increaseProgramCounter(2);
@@ -314,10 +325,9 @@ export function SNE_Vx_Vy(options: IOpcodeOptions): boolean
 */
 export function LD_I_Addr(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const address = (byte2 << 8) + (byte3 << 4) + byte4;
+    const { cpu, nnn } = options;
 
-    cpu.I = address;
+    cpu.I = nnn;
     return true;
 }
 
@@ -329,11 +339,10 @@ export function LD_I_Addr(options: IOpcodeOptions): boolean
 */
 export function JP_V0_Addr(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const address = (byte2 << 8) + (byte3 << 4) + byte4;
-    const v0 = cpu.getRegister(0x00);
+    const { cpu, nnn } = options;
+    const v0 = cpu.getRegister(0x0);
 
-    cpu.programCounter = address + v0;
+    cpu.programCounter = nnn + v0;
     return true;
 }
 
@@ -345,10 +354,9 @@ export function JP_V0_Addr(options: IOpcodeOptions): boolean
 */
 export function RND_Vx_Byte(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2, byte3, byte4 } = options;
-    const byte = (byte3 << 4) + byte4;
+    const { cpu, x, kk } = options;
 
-    cpu.setRegister(byte2, Math.floor(Math.random() * byte));
+    cpu.setRegister(x, Math.floor(Math.random() * kk));
     return true;
 }
 
@@ -361,12 +369,12 @@ export function RND_Vx_Byte(options: IOpcodeOptions): boolean
 export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
 {
     /* 0 1 8 */
-    const { cpu, byte2, byte3, byte4 } = options;
-    const buffer: Uint8Array = cpu.memory.slice(cpu.I, cpu.I + byte4);
-    let vx = cpu.getRegister(byte2);
-    let vy = cpu.getRegister(byte3);
+    const { cpu, x, y, n } = options;
+    const buffer: Uint8Array = cpu.memory.slice(cpu.I, cpu.I + n);
+    let vx = cpu.getRegister(x);
+    let vy = cpu.getRegister(y);
 
-    cpu.setRegister(0x0F, 0);
+    cpu.setRegister(0xF, 0);
 
     /* TODO: Draw */
     /*
@@ -376,21 +384,21 @@ export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
     ** If the sprite is positioned so part of it is outside the coordinates of the display,
     **   it wraps around to the opposite side of the screen.
     */
-    for (let y = 0; y < byte4; ++y)
+    for (let posY = 0; posY < n; ++posY)
     {
-        let line = buffer[y];
+        let line = buffer[posY];
         let mask = 1;
 
-        for (let x = 0; x < 8; ++x)
+        for (let posX = 0; posX < 8; ++posX)
         {
             /*
-            ** x, y     = buffer[y] & 0b10000000‬ >> 7
-            ** x+1, y   = buffer[y] & 0b01000000 >> 6
+            ** posX, posY     = buffer[posY] & 0b10000000‬ >> 7
+            ** posX+1, posY   = buffer[posY] & 0b01000000 >> 6
             ** ...
-            ** x+7, y   = buffer[y] & 0b00000001 >> 0
+            ** posX+7, posY   = buffer[posY] & 0b00000001 >> 0
             */
-            if (((line & mask) >> x) === 1)
-                cpu.canvasManager.drawPoint({ x: 7 - x + vx, y: y + vy });
+            if (((line & mask) >> posX) === 1)
+                cpu.canvasManager.drawPoint({ x: 7 - posX + vx, y: posY + vy });
             mask *= 2;
         }
     }
@@ -434,15 +442,29 @@ Fx18 - LD ST, Vx
 Set sound timer = Vx.
 
 ST is set equal to the value of Vx.
-
-
-Fx1E - ADD I, Vx
-Set I = I + Vx.
-
-The values of I and Vx are added, and the results are stored in I.
 */
 
 
+/*
+** Fx1E - ADD I, Vx
+** Set I = I + Vx.
+**
+** The values of I and Vx are added, and the results are stored in I.
+*/
+export function ADD_I_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, x } = options;
+
+    /*
+    ** 1 = 0 -> 4
+    ** 2 = 5 -> 9
+    ** ...
+    ** F = 4B -> 4F
+    */
+
+    cpu.I += cpu.getRegister(x);
+    return true;
+}
 
 /*
 ** Fx29 - LD F, Vx
@@ -452,7 +474,7 @@ The values of I and Vx are added, and the results are stored in I.
 */
 export function LD_F_Vx(options: IOpcodeOptions): boolean
 {
-    const { cpu, byte2 } = options;
+    const { cpu, x } = options;
 
     /*
     ** 1 = 0 -> 4
@@ -460,7 +482,7 @@ export function LD_F_Vx(options: IOpcodeOptions): boolean
     ** ...
     ** F = 4B -> 4F
     */
-    cpu.I = cpu.getRegister(byte2) * 5;
+    cpu.I = cpu.getRegister(x) * 5;
     return true;
 }
 
@@ -476,10 +498,20 @@ Fx55 - LD [I], Vx
 Store registers V0 through Vx in memory starting at location I.
 
 The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
-
-
-Fx65 - LD Vx, [I]
-Read registers V0 through Vx from memory starting at location I.
-
-The interpreter reads values from memory starting at location I into registers V0 through Vx.
 */
+
+
+/*
+** Fx65 - LD Vx, [I]
+** Read registers V0 through Vx from memory starting at location I.
+**
+** The interpreter reads values from memory starting at location I into registers V0 through Vx.
+*/
+export function LD_Vx_I(options: IOpcodeOptions): boolean
+{
+    const { cpu, x } = options;
+
+    for (let i = 0; i <= x; ++i)
+        cpu.setRegister(i, cpu.memory[cpu.I + i]);
+    return true;
+}

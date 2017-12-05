@@ -133,6 +133,14 @@ class CPU
         return this._V[registerId];
     }
 
+    public increaseRegister(registerId: number, value: number): void
+    {
+        if (registerId < 0 || registerId > COUNT_OF_GEN_REGS)
+            throw new UnknownRegisterError(registerId);
+
+        this._V[registerId] += value;
+    }
+
     public increaseProgramCounter(value: number): void
     {
         this._programCounter += value;
@@ -178,9 +186,11 @@ class CPU
         const firstByte = this._memory[this._programCounter];
         const secondByte = this._memory[this._programCounter + 1];
         const opcode:number = (firstByte << 8) + secondByte;
-        const byte2:number = ((opcode & 0x0F00) >> 8);
-        const byte3:number = ((opcode & 0x00F0) >> 4);
-        const byte4:number = (opcode & 0x000F);
+        const x:number = (opcode & 0x0F00) >> 8;
+        const y:number = (opcode & 0x00F0) >> 4;
+        const n:number = opcode & 0x000F;
+        const kk:number = opcode & 0x00FF;
+        const nnn:number = opcode & 0x0FFF;
         const op:IOpcode = opcodes.find((op: IOpcode): boolean => {
             return (opcode & op.mask) === op.id;
         });
@@ -192,7 +202,7 @@ class CPU
             console.log(this);
         }
 
-        if (op.fn({ cpu: this, byte2, byte3, byte4 }) === true)
+        if (op.fn({ cpu: this, x, y, n, kk, nnn }) === true)
             this._programCounter += 2;
     }
 }
