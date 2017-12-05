@@ -63,7 +63,7 @@ class CPU
 
     public set programCounter(value: number)
     {
-        this._programCounter = (value & 0xFFF);
+        this._programCounter = value & 0xFFF;
     }
 
     public get memory(): Uint8Array
@@ -78,7 +78,7 @@ class CPU
 
     public set I(value: number)
     {
-        this._I = value;
+        this._I = value & 0xFFF;
     }
 
     /*

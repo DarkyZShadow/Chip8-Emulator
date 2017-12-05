@@ -77,13 +77,13 @@ const opcodes:IOpcode[] = [
 	{ id: 0x6000, mask: 0xF000, fn: fn.LD_Vx_Byte },        /* LD Vx, byte */
 	{ id: 0x7000, mask: 0xF000, fn: fn.ADD_Vx_Byte },       /* ADD Vx, byte */
 	{ id: 0x8000, mask: 0xF00F, fn: fn.LD_Vx_Vy },          /* LD Vx, Vy */
-	{ id: 0x8001, mask: 0xF00F, fn: null },                 /* OR Vx, Vy */
+	{ id: 0x8001, mask: 0xF00F, fn: fn.OR_Vx_Vy },          /* OR Vx, Vy */
 	{ id: 0x8002, mask: 0xF00F, fn: fn.AND_Vx_Vy },         /* AND Vx, Vy */
 	{ id: 0x8003, mask: 0xF00F, fn: fn.XOR_Vx_Vy },         /* XOR Vx, Vy */
 	{ id: 0x8004, mask: 0xF00F, fn: fn.ADD_Vx_Vy },         /* ADD Vx, Vy */
 	{ id: 0x8005, mask: 0xF00F, fn: fn.SUB_Vx_Vy },         /* SUB Vx, Vy */
-	{ id: 0x8006, mask: 0xF00F, fn: null },                 /* SHR Vx {, Vy} */
-	{ id: 0x8007, mask: 0xF00F, fn: null },                 /* SUBN Vx, Vy */
+	{ id: 0x8006, mask: 0xF00F, fn: fn.SHR_Vx },            /* SHR Vx {, Vy} */
+	{ id: 0x8007, mask: 0xF00F, fn: fn.SUBN_Vx_Vy },        /* SUBN Vx, Vy */
 	{ id: 0x800E, mask: 0xF00F, fn: fn.SHL_Vx },            /* SHL Vx {, Vy} */
 	{ id: 0x9000, mask: 0xF00F, fn: null },                 /* SNE Vx, Vy */
 	{ id: 0xA000, mask: 0xF000, fn: fn.LD_I_Addr },         /* LD I, addr */

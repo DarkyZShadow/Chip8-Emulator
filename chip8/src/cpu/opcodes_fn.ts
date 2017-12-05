@@ -203,15 +203,7 @@ export function ADD_Vx_Vy(options: IOpcodeOptions): boolean
     const vy = cpu.getRegister(y);
     const result = vx + vy;
 
-    if (result > 0xFF)
-    {
-        cpu.setRegister(0xF, 1);
-    }
-    else
-    {
-        cpu.setRegister(0xF, 0);
-    }
-
+    cpu.setRegister(0xF, (result > 0xFF) ? 1 : 0);
     cpu.setRegister(x, result);
     return true;
 }
@@ -228,15 +220,7 @@ export function SUB_Vx_Vy(options: IOpcodeOptions): boolean
     const vx = cpu.getRegister(x);
     const vy = cpu.getRegister(y);
 
-    if (vx > vy)
-    {
-        cpu.setRegister(0xF, 1);
-    }
-    else
-    {
-        cpu.setRegister(0xF, 0);
-    }
-
+    cpu.setRegister(0xF, (vx > vy) ? 1 : 0);
     cpu.setRegister(x, vx - vy);
     return true;
 }
@@ -271,15 +255,7 @@ export function SUBN_Vx_Vy(options: IOpcodeOptions): boolean
     const vx = cpu.getRegister(x);
     const vy = cpu.getRegister(y);
 
-    if (vy > vx)
-    {
-        cpu.setRegister(0xF, 1);
-    }
-    else
-    {
-        cpu.setRegister(0xF, 0);
-    }
-
+    cpu.setRegister(0xF, (vy > vx) ? 1 : 0);
     cpu.setRegister(x, vy - vx);
     return true;
 }
@@ -450,6 +426,7 @@ ST is set equal to the value of Vx.
 ** Set I = I + Vx.
 **
 ** The values of I and Vx are added, and the results are stored in I.
+** [+] VF is set to 1 if I > 0x0FFF. Otherwise set to 0.
 */
 export function ADD_I_Vx(options: IOpcodeOptions): boolean
 {
@@ -461,7 +438,7 @@ export function ADD_I_Vx(options: IOpcodeOptions): boolean
     ** ...
     ** F = 4B -> 4F
     */
-
+    cpu.setRegister(0xF, cpu.I > 0x0FFF ? 1 : 0);
     cpu.I += cpu.getRegister(x);
     return true;
 }
@@ -492,8 +469,11 @@ Fx33 - LD B, Vx
 Store BCD representation of Vx in memory locations I, I+1, and I+2.
 
 The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
+*/
 
 
+
+/*
 Fx55 - LD [I], Vx
 Store registers V0 through Vx in memory starting at location I.
 
