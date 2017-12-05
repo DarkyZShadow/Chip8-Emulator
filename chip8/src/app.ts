@@ -7,7 +7,8 @@ const options = {
     scale: 100,
     canvasWidth: 640,
     canvasHeight: 320,
-    backgroundColor: 'white'
+    color: 'white',
+    backgroundColor: 'black'
 };
 const app:HTMLElement = document.getElementById('app');
 const loadInput:HTMLElement = document.getElementById('load-input');

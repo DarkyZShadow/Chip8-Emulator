@@ -66,284 +66,57 @@ const opcodes:IOpcode[] = [
     **              Chip8
     ** --------------------------------
     */
-
-    /* SYS addr (unused) */
-	{
-		mask: 0xF000,
-		id: 0x0000,
-		fn: fn.NOP
-	},
-	/* CLS */
-	{
-		mask: 0xFFFF,
-		id: 0x00E0,
-		fn: fn.CLS
-	},
-	/* RET */
-	{
-		mask: 0xFFFF,
-		id: 0x00EE,
-		fn: fn.RET
-	},
-	/* JP addr */
-	{
-		mask: 0xF000,
-		id: 0x1000,
-		fn: fn.JMP
-	},
-	/* CALL addr */
-	{
-		mask: 0xF000,
-		id: 0x2000,
-		fn: null
-	},
-	/* SE Vx, byte */
-	{
-		mask: 0xF000,
-		id: 0x3000,
-		fn: fn.SE_Vx_Byte
-	},
-	/* SNE Vx, byte */
-	{
-		mask: 0xF000,
-		id: 0x4000,
-		fn: fn.SNE_Vx_Byte
-	},
-	/* SE Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x5000,
-		fn: fn.SE_Vx_Vy
-	},
-	/* LD Vx, byte */
-	{
-		mask: 0xF000,
-		id: 0x6000,
-		fn: fn.LD_Vx_Byte
-	},
-	/* ADD Vx, byte */
-	{
-		mask: 0xF000,
-		id: 0x7000,
-		fn: fn.ADD_Vx_Byte
-	},
-	/* LD Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8000,
-		fn: null
-	},
-	/* OR Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8001,
-		fn: null
-	},
-	/* AND Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8002,
-		fn: null
-	},
-	/* XOR Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8003,
-		fn: null
-	},
-	/* ADD Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8004,
-		fn: null
-	},
-	/* SUB Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8005,
-		fn: fn.SUB_Vx_Vy
-	},
-	/* SHR Vx {, Vy} */
-	{
-		mask: 0xF00F,
-		id: 0x8006,
-		fn: null
-	},
-	/* SUBN Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x8007,
-		fn: null
-	},
-	/* SHL Vx {, Vy} */
-	{
-		mask: 0xF00F,
-		id: 0x800E,
-		fn: null
-	},
-	/* SNE Vx, Vy */
-	{
-		mask: 0xF00F,
-		id: 0x9000,
-		fn: null
-	},
-	/* LD I, addr */
-	{
-		mask: 0xF000,
-		id: 0xA000,
-		fn: fn.LD_I_Addr
-	},
-	/* JP V0, addr */
-	{
-		mask: 0xF000,
-		id: 0xB000,
-		fn: null
-	},
-	/* RND Vx, byte */
-	{
-		mask: 0xF000,
-		id: 0xC000,
-		fn: RND_Vx_Byte
-	},
-	/* DRW Vx, Vy, nibble */
-	{
-		mask: 0xF000,
-		id: 0xD000,
-		fn: fn.DRW_Vx_Vy_Nibble
-	},
-	/* SKP Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xE09E,
-		fn: null
-	},
-	/* SKNP Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xE0A1,
-		fn: null
-	},
-	/* LD Vx, DT */
-	{
-		mask: 0xF0FF,
-		id: 0xF007,
-		fn: null
-	},
-	/* LD Vx, K */
-	{
-		mask: 0xF0FF,
-		id: 0xF00A,
-		fn: null
-	},
-	/* LD DT, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF015,
-		fn: null
-	},
-	/* LD ST, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF018,
-		fn: null
-	},
-	/* ADD I, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF01E,
-		fn: null
-	},
-	/* LD F, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF029,
-		fn: fn.LD_F_Vx
-	},
-	/* LD B, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF033,
-		fn: null
-	},
-	/* LD [I], Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF055,
-		fn: null
-	},
-	/* LD Vx, [I] */
-	{
-		mask: 0xF0FF,
-		id: 0xF065,
-		fn: null
-    },
+	{ id: 0x0000, mask: 0xF000, fn: fn.NOP },               /* SYS addr (unused) */
+	{ id: 0x00E0, mask: 0xFFFF, fn: fn.CLS },               /* CLS */
+	{ id: 0x00EE, mask: 0xFFFF, fn: fn.RET },               /* RET */
+	{ id: 0x1000, mask: 0xF000, fn: fn.JMP },               /* JP addr */
+	{ id: 0x2000, mask: 0xF000, fn: fn.CALL },              /* CALL addr */
+	{ id: 0x3000, mask: 0xF000, fn: fn.SE_Vx_Byte },        /* SE Vx, byte */
+	{ id: 0x4000, mask: 0xF000, fn: fn.SNE_Vx_Byte },       /* SNE Vx, byte */
+	{ id: 0x5000, mask: 0xF00F, fn: fn.SE_Vx_Vy },          /* SE Vx, Vy */
+	{ id: 0x6000, mask: 0xF000, fn: fn.LD_Vx_Byte },        /* LD Vx, byte */
+	{ id: 0x7000, mask: 0xF000, fn: fn.ADD_Vx_Byte },       /* ADD Vx, byte */
+	{ id: 0x8000, mask: 0xF00F, fn: fn.LD_Vx_Vy },          /* LD Vx, Vy */
+	{ id: 0x8001, mask: 0xF00F, fn: null },                 /* OR Vx, Vy */
+	{ id: 0x8002, mask: 0xF00F, fn: fn.AND_Vx_Vy },         /* AND Vx, Vy */
+	{ id: 0x8003, mask: 0xF00F, fn: fn.XOR_Vx_Vy },         /* XOR Vx, Vy */
+	{ id: 0x8004, mask: 0xF00F, fn: fn.ADD_Vx_Vy },         /* ADD Vx, Vy */
+	{ id: 0x8005, mask: 0xF00F, fn: fn.SUB_Vx_Vy },         /* SUB Vx, Vy */
+	{ id: 0x8006, mask: 0xF00F, fn: null },                 /* SHR Vx {, Vy} */
+	{ id: 0x8007, mask: 0xF00F, fn: null },                 /* SUBN Vx, Vy */
+	{ id: 0x800E, mask: 0xF00F, fn: fn.SHL_Vx },            /* SHL Vx {, Vy} */
+	{ id: 0x9000, mask: 0xF00F, fn: null },                 /* SNE Vx, Vy */
+	{ id: 0xA000, mask: 0xF000, fn: fn.LD_I_Addr },         /* LD I, addr */
+	{ id: 0xB000, mask: 0xF000, fn: null },                 /* JP V0, addr */
+	{ id: 0xC000, mask: 0xF000, fn: RND_Vx_Byte },          /* RND Vx, byte */
+	{ id: 0xD000, mask: 0xF000, fn: fn.DRW_Vx_Vy_Nibble },  /* DRW Vx, Vy, nibble */
+	{ id: 0xE09E, mask: 0xF0FF, fn: null },                 /* SKP Vx */
+	{ id: 0xE0A1, mask: 0xF0FF, fn: null },                 /* SKNP Vx */
+	{ id: 0xF007, mask: 0xF0FF, fn: null },                 /* LD Vx, DT */
+	{ id: 0xF00A, mask: 0xF0FF, fn: null },                 /* LD Vx, K */
+	{ id: 0xF015, mask: 0xF0FF, fn: null },                 /* LD DT, Vx */
+	{ id: 0xF018, mask: 0xF0FF, fn: null },                 /* LD ST, Vx */
+	{ id: 0xF01E, mask: 0xF0FF, fn: fn.ADD_I_Vx },          /* ADD I, Vx */
+	{ id: 0xF029, mask: 0xF0FF, fn: fn.LD_F_Vx },           /* LD F, Vx */
+	{ id: 0xF033, mask: 0xF0FF, fn: null },                 /* LD B, Vx */
+	{ id: 0xF055, mask: 0xF0FF, fn: null },                 /* LD [I], Vx */
+	{ id: 0xF065, mask: 0xF0FF, fn: fn.LD_Vx_I },           /* LD Vx, [I] */
 
     /*
     ** --------------------------------
     **          Super Chip-48:
     ** --------------------------------
     */
-
-	/* SCD nibble */
-	{
-		mask: 0xFFF0,
-		id: 0x00C0,
-		fn: null
-	},
-	/* SCR */
-	{
-		mask: 0xFFFF,
-		id: 0x00FB,
-		fn: null
-	},
-	/* SCL */
-	{
-		mask: 0xFFFF,
-		id: 0x00FC,
-		fn: null
-	},
-	/* EXIT */
-	{
-		mask: 0xFFFF,
-		id: 0x00FD,
-		fn: null
-	},
-	/* LOW */
-	{
-		mask: 0xFFFF,
-		id: 0x00FE,
-		fn: null
-	},
-	/* HIGH */
-	{
-		mask: 0xFFFF,
-		id: 0x00FF,
-		fn: null
-	},
-	/* DRW Vx, Vy, 0 */
-	{
-		mask: 0xF00F,
-		id: 0xD000,
-		fn: null
-	},
-	/* LD HF, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF030,
-		fn: null
-	},
-	/* LD R, Vx */
-	{
-		mask: 0xF0FF,
-		id: 0xF075,
-		fn: null
-	},
-	/* LD Vx, R */
-	{
-		mask: 0xF0FF,
-		id: 0xF085,
-		fn: null
-	}
+	{ id: 0x00C0, mask: 0xFFF0, fn: null },                 /* SCD nibble */
+	{ id: 0x00FB, mask: 0xFFFF, fn: null },                 /* SCR */
+	{ id: 0x00FC, mask: 0xFFFF, fn: null },                 /* SCL */
+	{ id: 0x00FD, mask: 0xFFFF, fn: null },                 /* EXIT */
+	{ id: 0x00FE, mask: 0xFFFF, fn: null },                 /* LOW */
+	{ id: 0x00FF, mask: 0xFFFF, fn: null },                 /* HIGH */
+	{ id: 0xD000, mask: 0xF00F, fn: null },                 /* DRW Vx, Vy, 0 */
+	{ id: 0xF030, mask: 0xF0FF, fn: null },                 /* LD HF, Vx */
+	{ id: 0xF075, mask: 0xF0FF, fn: null },                 /* LD R, Vx */
+	{ id: 0xF085, mask: 0xF0FF, fn: null }                  /* LD Vx, R */
 ];
 
 export default opcodes;
