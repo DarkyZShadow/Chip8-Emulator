@@ -463,23 +463,40 @@ export function LD_F_Vx(options: IOpcodeOptions): boolean
     return true;
 }
 
+/*
+** Fx33 - LD B, Vx
+** Store BCD representation of Vx in memory locations I, I+1, and I+2.
+**
+** The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
+*/
+export function LD_B_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, x } = options;
+    const vx = cpu.getRegister(x);
+    const hundreds = Math.trunc(vx / 100);
+    const tens = Math.trunc((vx - hundreds * 100) / 10);
+    const ones = vx % 10;
+
+    cpu.memory[cpu.I] = hundreds;
+    cpu.memory[cpu.I + 1] = tens;
+    cpu.memory[cpu.I + 2] = ones;
+    return true;
+}
 
 /*
-Fx33 - LD B, Vx
-Store BCD representation of Vx in memory locations I, I+1, and I+2.
-
-The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
+** Fx55 - LD [I], Vx
+** Store registers V0 through Vx in memory starting at location I.
+**
+** The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
 */
+export function LD_I_Vx(options: IOpcodeOptions): boolean
+{
+    const { cpu, x } = options;
 
-
-
-/*
-Fx55 - LD [I], Vx
-Store registers V0 through Vx in memory starting at location I.
-
-The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
-*/
-
+    for (let i = 0; i <= x; ++i)
+        cpu.memory[cpu.I + i] = cpu.getRegister(i);
+    return true;
+}
 
 /*
 ** Fx65 - LD Vx, [I]

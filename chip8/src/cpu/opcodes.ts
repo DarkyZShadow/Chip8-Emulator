@@ -98,8 +98,8 @@ const opcodes:IOpcode[] = [
 	{ id: 0xF018, mask: 0xF0FF, fn: null },                 /* LD ST, Vx */
 	{ id: 0xF01E, mask: 0xF0FF, fn: fn.ADD_I_Vx },          /* ADD I, Vx */
 	{ id: 0xF029, mask: 0xF0FF, fn: fn.LD_F_Vx },           /* LD F, Vx */
-	{ id: 0xF033, mask: 0xF0FF, fn: null },                 /* LD B, Vx */
-	{ id: 0xF055, mask: 0xF0FF, fn: null },                 /* LD [I], Vx */
+	{ id: 0xF033, mask: 0xF0FF, fn: fn.LD_B_Vx },           /* LD B, Vx */
+	{ id: 0xF055, mask: 0xF0FF, fn: fn.LD_I_Vx },           /* LD [I], Vx */
 	{ id: 0xF065, mask: 0xF0FF, fn: fn.LD_Vx_I },           /* LD Vx, [I] */
 
     /*
