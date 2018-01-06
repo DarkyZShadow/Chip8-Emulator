@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Launcher Website</title>
         <!-- vendor css -->
-        <!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         <style>
             body, #app {
                 display: flex;
@@ -20,26 +20,28 @@
                 height: 100vh;
                 width: 100vw;
                 margin: 0;
-                background-color: #222;
-                color: whitesmoke;
+                background-color: white;
             }
 
             #app {
                 width: 50vw;
                 height: 50vh;
-                background-color: purple;
             }
 
             .wrapper
             {
                 display: flex;
             }
+
+            canvas {
+                border: solid gray;
+            }
         </style>
     </head>
     <body>
         <h1>Chip8 - Emulator</h1>
-        <div id="app"></div>
-        <div class="wrapepr">
+        <div id="game-wrapper"></div>
+        <div class="btn-wrapper">
             <input type="file" id="load-input" />
             <button id="start-button">Start</button>
             <button id="suspend-button">Suspend</button>
