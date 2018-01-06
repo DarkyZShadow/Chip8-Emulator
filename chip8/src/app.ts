@@ -10,7 +10,7 @@ const options = {
     color: 'white',
     backgroundColor: 'black'
 };
-const app:HTMLElement = document.getElementById('app');
+const app:HTMLElement = document.getElementById('game-wrapper');
 const loadInput:HTMLElement = document.getElementById('load-input');
 const startButton:HTMLElement = document.getElementById('start-button');
 const suspendButton:HTMLElement = document.getElementById('suspend-button');

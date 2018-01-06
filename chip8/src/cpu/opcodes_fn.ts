@@ -354,7 +354,6 @@ export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
 
     /* TODO: Draw */
     /*
-    ** These bytes are then displayed as sprites on screen at coordinates (Vx, Vy).
     ** Sprites are XORed onto the existing screen.
     ** If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
     ** If the sprite is positioned so part of it is outside the coordinates of the display,
