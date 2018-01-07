@@ -1,6 +1,6 @@
 import opcodes from './opcodes';
 import { IOpcode } from './interfaces';
-import { CanvasManager } from '../render';
+import { Screen } from '../render';
 import { spriteNumbers } from './constants';
 import { UnknownRegisterError } from '../errors';
 
@@ -14,7 +14,7 @@ class CPU
     /* General properties */
     private _animationHandle: number;
     private readonly _frequency: number;
-    private readonly _canvasManager: CanvasManager;
+    private readonly _screen: Screen;
 
     /* Memory properties */
     private readonly _V: Uint8Array;
@@ -30,7 +30,7 @@ class CPU
     private _timestep: number;
 
     /* Constructor */
-    constructor(canvasManager: CanvasManager, hzFrequency: number) {
+    constructor(screen: Screen, hzFrequency: number) {
         this._V = new Uint8Array(COUNT_OF_GEN_REGS + 1);
         this._memory = new Uint8Array(MEMORY_SIZE);
         this._stack = new Uint16Array(MAX_JUMPS);
@@ -38,7 +38,7 @@ class CPU
         this._I = 0;
         this._stackPointer = 0;
         this._frequency = hzFrequency;
-        this._canvasManager = canvasManager;
+        this._screen = screen;
         this._lastFrameUpdate = -1;
         this._animationHandle = -1;
         this._delta = 0;
@@ -51,9 +51,9 @@ class CPU
     ** Getters/Setters
     */
 
-    public get canvasManager(): CanvasManager
+    public get screen(): Screen
     {
-        return this._canvasManager;
+        return this._screen;
     }
 
     public get programCounter(): number
@@ -82,7 +82,7 @@ class CPU
     }
 
     /*
-    ** Functions
+    ** Public methods
     */
 
     public loadRom(buffer: ArrayBuffer)
@@ -152,7 +152,7 @@ class CPU
     }
 
     /*
-    ** Private functions
+    ** Private methods
     */
 
     private loadSprites(): void
@@ -174,7 +174,7 @@ class CPU
         }
 
         /* Render & set timestamp */
-        this._canvasManager.render();
+        this._screen.render();
         this._lastFrameUpdate = timestamp;
 
         /* Loop */

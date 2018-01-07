@@ -47,6 +47,20 @@ class CanvasManager
         this._ctx.lineWidth = this._scale;
     }
 
+    /* Properties */
+
+    public get width(): number
+    {
+        return this._width;
+    }
+
+    public get height(): number
+    {
+        return this._height;
+    }
+
+    /* Methods */
+
     public bind(parent: HTMLElement): void
     {
         parent.appendChild(this._canvas);
@@ -69,6 +83,17 @@ class CanvasManager
 
         this.initPath();
         this._ctx.rect(this.getDelta(x), this.getDelta(y), 1, 1);
+    }
+
+    public clearPoint(options: ICanvasDrawOptions): void
+    {
+        const { x, y } = options;
+
+        if (x < 0 || x >= this._width || y < 0 || y >= this._height)
+            return;
+
+        this.render();
+        this._ctx.clearRect(x * this._scale, y * this._scale, this._scale, this._scale);
     }
 
     public render(): boolean

@@ -1,5 +1,5 @@
 import CPU from './cpu';
-import { CanvasManager } from './render';
+import { Screen } from './render';
 
 const options = {
     width: 64,
@@ -14,15 +14,15 @@ const app:HTMLElement = document.getElementById('game-wrapper');
 const loadInput:HTMLElement = document.getElementById('load-input');
 const startButton:HTMLElement = document.getElementById('start-button');
 const suspendButton:HTMLElement = document.getElementById('suspend-button');
-const manager:CanvasManager = new CanvasManager(options);
-const chip8:CPU = new CPU(manager, 250);
+const screen:Screen = new Screen(options);
+const chip8:CPU = new CPU(screen, 250);
 
 loadInput.addEventListener('change', loadRom);
 startButton.addEventListener('click', start);
 suspendButton.addEventListener('click', suspend);
 
 /* Bind manager */
-manager.bind(app);
+screen.bind(app);
 
 function loadRom(): void
 {

@@ -14,7 +14,7 @@ export function CLS(options: IOpcodeOptions): boolean
 {
     const { cpu } = options;
 
-    cpu.canvasManager.clear();
+    cpu.screen.clear();
     return true;
 }
 
@@ -372,12 +372,13 @@ export function DRW_Vx_Vy_Nibble(options: IOpcodeOptions): boolean
             ** ...
             ** posX+7, posY   = buffer[posY] & 0b00000001 >> 0
             */
-            if (((line & mask) >> posX) === 1)
-                cpu.canvasManager.drawPoint({ x: 7 - posX + vx, y: posY + vy });
+            if (!!((line & mask) >> posX))
+                if (cpu.screen.XORPoint({ x: 7 - posX + vx, y: posY + vy }))
+                    cpu.setRegister(0xF, 1);
             mask *= 2;
         }
     }
-    cpu.canvasManager.render();
+    cpu.screen.render();
     return true;
 }
 
