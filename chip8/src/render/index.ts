@@ -1,3 +1,4 @@
 import CanvasManager from './canvas_manager';
+import Screen from './screen';
 
-export { CanvasManager };
+export { CanvasManager, Screen };
